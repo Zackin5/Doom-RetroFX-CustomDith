@@ -1,0 +1,26 @@
+AddOptionMenu "OptionsMenu"
+{
+	Submenu "Retro FX", "RetroOptions"
+}
+
+OptionValue Dither_NoisePattern
+{
+	0, "Bayer"
+	1, "Blue Noise"
+}
+
+OptionMenu "RetroOptions"
+{
+	Position -15
+	Title "Retro FX Config"
+	Option "Enable?", "gl_retro", "OnOff"
+	Option "Pixelate?", "gl_retro_enablepixelate", "YesNo"
+	Slider "Pixel Scale", "gl_retro_pixelcount", 1, 16, 0.5, 2
+	Option "Alternative Pixel Scaling", "gl_retro_altscaling", "YesNo"
+	Option "Bit Depth Scaling", "gl_retro_enableposterization", "YesNo"
+	Slider "Bit Depth", "gl_retro_posterization", 3, 32, 1, 0
+	//Option "Ordered Dither?", "gl_retro_ordered", "YesNo"
+	Option "Dither Pattern", "gl_retro_noisepattern", "Dither_NoisePattern"
+	Slider "Dither Spread", "gl_retro_spread", 0, 32, 0.5, 0
+	Slider "Gamma", "gl_retro_gamma", 0, 1, 0.01, 2
+}

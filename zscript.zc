@@ -1,0 +1,28 @@
+version "2.5"
+
+class RetroHandler : EventHandler
+{
+	override void UiTick()
+	{
+		PlayerInfo p = players[consoleplayer];
+		if (Cvar.GetCVar("gl_retro", p).GetInt() > 0 && 
+			Cvar.GetCVar("gl_retro_enablepixelate", p).GetInt() + 
+			Cvar.GetCVar("gl_retro_enableposterization", p).GetInt() > 0)
+		{
+			Shader.SetUniform1f(p, "RetroShader", "pixelcount", Cvar.GetCVar("gl_retro_pixelcount", p).GetFloat());
+			Shader.SetUniform1f(p, "RetroShader", "posterization", Cvar.GetCVar("gl_retro_posterization", p).GetInt());
+			Shader.SetUniform1f(p, "RetroShader", "dspread", Cvar.GetCVar("gl_retro_spread", p).GetFloat());
+			Shader.SetUniform1f(p, "RetroShader", "gamma", Cvar.GetCVar("gl_retro_gamma", p).GetFloat());
+			Shader.SetUniform1f(p, "RetroShader", "enablepixelate", Cvar.GetCVar("gl_retro_enablepixelate", p).GetInt());
+			Shader.SetUniform1f(p, "RetroShader", "ordereddither", Cvar.GetCVar("gl_retro_ordered", p).GetInt());
+			Shader.SetUniform1f(p, "RetroShader", "enableposterization", Cvar.GetCVar("gl_retro_enableposterization", p).GetInt());
+			Shader.SetUniform1f(p, "RetroShader", "noisePattern", Cvar.GetCVar("gl_retro_noisepattern", p).GetInt());
+			Shader.SetUniform1f(p, "RetroShader", "altScaling", Cvar.GetCVar("gl_retro_altscaling", p).GetInt());
+			Shader.SetEnabled(p, "RetroShader", true);
+		}
+		else
+		{
+			Shader.SetEnabled(p, "RetroShader", false);
+		}
+	}
+}
