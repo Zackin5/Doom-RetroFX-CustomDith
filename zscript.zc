@@ -17,9 +17,25 @@ class RetroHandler : StaticEventHandler
 			Shader.SetUniform1f(p, "RetroShader", "ordereddither", Cvar.GetCVar("gl_retro_ordered", p).GetInt());
 			Shader.SetUniform1f(p, "RetroShader", "enableposterization", Cvar.GetCVar("gl_retro_enableposterization", p).GetInt());
 			Shader.SetUniform1f(p, "RetroShader", "noisePattern", Cvar.GetCVar("gl_retro_noisepattern", p).GetInt());
-			Shader.SetUniform1f(p, "RetroShader", "scaleMode", Cvar.GetCVar("gl_retro_scalingmode", p).GetInt());
-			Vector2 bresl = (clamp(gl_retro_mode2_resx,1,Screen.GetWidth()),clamp(gl_retro_mode2_resy,1,Screen.GetHeight()));
-			Shader.SetUniform2f(p, "RetroShader", "mode2_res", bresl);
+			
+			Int scalingmode = Cvar.GetCVar("gl_retro_scalingmode", p).GetInt();
+			Shader.SetUniform1f(p, "RetroShader", "scaleMode", scalingmode);
+
+			if (scalingmode == 2)
+			{
+				// Resolution scaling mode res calc
+				Vector2 bresl = (clamp(gl_retro_mode2_resx,1,Screen.GetWidth()), clamp(gl_retro_mode2_resy,1,Screen.GetHeight()));
+				Shader.SetUniform2f(p, "RetroShader", "mode2_res", bresl);
+			}
+			else if (scalingmode == 3)
+			{
+				// Resolution scaling mode auto height calc
+				Float scaleRatio = Screen.GetWidth() / gl_retro_mode2_resx;
+				Float autoY = Screen.GetHeight() / scaleRatio;
+				Vector2 bresl = (clamp(gl_retro_mode2_resx,1,Screen.GetWidth()), clamp(autoY,1,Screen.GetHeight()));
+				Shader.SetUniform2f(p, "RetroShader", "mode2_res", bresl);
+			}
+
 			Shader.SetEnabled(p, "RetroShader", true);
 		}
 		else

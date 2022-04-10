@@ -9,7 +9,7 @@ vec4 pixelate(sampler2D colorTex, float spread)
 		vec2 targtres = ssize / pixelcount;
 		coord = (floor(TexCoord*targtres)+0.5)/targtres;
 	}
-	else if(scaleMode == 2)
+	else if(scaleMode == 2 || scaleMode == 3)
 		// Scale to resolution
 		coord = (floor(TexCoord*mode2_res)+0.5)/mode2_res;
 	else
