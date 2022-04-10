@@ -1,6 +1,6 @@
 version "2.5"
 
-class RetroHandler : EventHandler
+class RetroHandler : StaticEventHandler
 {
 	override void UiTick()
 	{
@@ -17,7 +17,9 @@ class RetroHandler : EventHandler
 			Shader.SetUniform1f(p, "RetroShader", "ordereddither", Cvar.GetCVar("gl_retro_ordered", p).GetInt());
 			Shader.SetUniform1f(p, "RetroShader", "enableposterization", Cvar.GetCVar("gl_retro_enableposterization", p).GetInt());
 			Shader.SetUniform1f(p, "RetroShader", "noisePattern", Cvar.GetCVar("gl_retro_noisepattern", p).GetInt());
-			Shader.SetUniform1f(p, "RetroShader", "altScaling", Cvar.GetCVar("gl_retro_altscaling", p).GetInt());
+			Shader.SetUniform1f(p, "RetroShader", "scaleMode", Cvar.GetCVar("gl_retro_scalingmode", p).GetInt());
+			Vector2 bresl = (clamp(gl_retro_mode2_resx,1,Screen.GetWidth()),clamp(gl_retro_mode2_resy,1,Screen.GetHeight()));
+			Shader.SetUniform2f(p, "RetroShader", "mode2_res", bresl);
 			Shader.SetEnabled(p, "RetroShader", true);
 		}
 		else

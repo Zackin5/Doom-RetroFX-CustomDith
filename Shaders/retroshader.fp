@@ -2,12 +2,19 @@ vec4 pixelate(sampler2D colorTex, float spread)
 {
 	ivec2 ssize = textureSize( InputTexture, 0 );
 					
-	vec2 targtres = ssize / pixelcount;
 	vec2 coord;
-	if(altScaling == 1)
-		coord = vec2((floor(TexCoord.x*targtres.x)+0.5)/targtres.x,(floor(TexCoord.y*targtres.y)+0.5)/targtres.y);
+	if(scaleMode == 1)
+	{
+		// Alternative scaling
+		vec2 targtres = ssize / pixelcount;
+		coord = (floor(TexCoord*targtres)+0.5)/targtres;
+	}
+	else if(scaleMode == 2)
+		// Scale to resolution
+		coord = (floor(TexCoord*mode2_res)+0.5)/mode2_res;
 	else
-		coord = vec2(ceil(TexCoord.x*ssize.x/pixelcount)/ssize.x*pixelcount,ceil(TexCoord.y*ssize.y/pixelcount)/ssize.y*pixelcount);
+		// Original scaling
+		coord = ceil(TexCoord*ssize/pixelcount)/ssize*pixelcount;
 
 	vec2 dcoord;
 	dcoord = vec2( (TexCoord.x*ssize.x/pixelcount ) ,

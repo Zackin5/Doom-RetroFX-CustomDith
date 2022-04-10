@@ -9,10 +9,9 @@ hardwareshader postprocess scene
 	Uniform int ordereddither
 	Uniform int posterization
 	Uniform float gamma
-	Uniform int aspectx
-	Uniform int aspecty
 	Uniform int enablepixelate
 	Uniform int enableposterization
 	Uniform int noisePattern
-	Uniform int altScaling
+	Uniform int scaleMode
+	Uniform vec2 mode2_res
 }
