@@ -1,3 +1,4 @@
+// RetroFX implementation
 vec4 pixelate(sampler2D colorTex, float spread)
 {
 	ivec2 ssize = textureSize( InputTexture, 0 );
@@ -39,28 +40,82 @@ vec4 pixelate(sampler2D colorTex, float spread)
 	return texture(colorTex, coord)*dth;
 }
 
-vec4 posterize(vec4 pixelColor)
+vec3 posterize_retrofx(vec3 pixelColor)
 {
-	vec4 c = pixelColor;
-	c = pow(c, vec4(gamma, gamma, gamma, 1));
+	vec3 c = pixelColor;
+	c = pow(c, vec3(gamma));
 	c = c * posterization;
 	c = floor(c);
 	c = c / posterization;
-	c = pow(c, vec4(1.0/gamma));
+	c = pow(c, vec3(1.0/gamma));
 	return c;
+}
+
+// Troocutter 24bit
+float WeightedLum(vec3 colour)
+{
+	colour *= colour;
+	colour.r *= 0.299;
+	colour.g *= 0.587;
+	colour.b *= 0.114;
+	return sqrt(colour.r + colour.g + colour.b);
+}
+
+vec3 Tonemap(vec3 color, float sat)
+{
+	ivec3 c = ivec3(clamp(color, vec3(0.0), vec3(1.0)) * 255.0 + 0.5);
+	int index = (c.r * 256 + c.g) * 256 + c.b;
+	int tx = index % 4096;
+	int ty = int(index * 0.000244140625);
+	
+	vec3 hueblend = texelFetch(TrooCullersLUT, ivec2(tx, ty), 0).rgb;
+	vec3 colourblend = texelFetch(TrooCullersLUT, ivec2(tx, ty + 4096), 0).rgb;
+	
+	return mix(hueblend, colourblend, sat);
+}
+
+vec3 posterize_troo(vec3 pixelColor, float sat, float greyed)
+{
+	vec3 colour = pixelColor.rgb;
+	vec3 blend = Tonemap(colour, sat);
+	
+	float maxRGB = max(blend.r, max(blend.g, blend.b));
+	float minRGB = min(blend.r, min(blend.g, blend.b));
+	
+	if (maxRGB - minRGB == 0.0)
+	{
+		colour = colour * (1.0 - greyed) + (WeightedLum(colour) * greyed);
+	}
+	else
+	{
+		colour = blend / clamp(WeightedLum(blend), 0.000001, 1.0) * WeightedLum(colour);
+	}
+
+	return colour;
+}
+
+vec4 posterize(vec4 pixelColor)
+{
+	vec3 color = pixelColor.rgb;
+	if (posterizationMode == 2)
+		color = posterize_troo(color, 1.0, 1.0);
+	else
+		color = posterize_retrofx(color);
+
+	return vec4(color, pixelColor.a);
 }
 
 void main() 
 {
 	if ( enablepixelate == 1 )
 	{
-		if ( enableposterization == 1 )
+		if ( posterizationMode > 0 )
 		{
 			vec4 c = pixelate(InputTexture, dspread);
 			c = posterize(c);
 			FragColor = vec4(c);
 		}
-		if ( enableposterization == 0 )
+		else
 		{
 			FragColor = pixelate(InputTexture, dspread);
 		}

@@ -4,13 +4,14 @@ hardwareshader postprocess scene
 	Shader "shaders/retroshader.fp" 330
 	Texture Bayer "textures/Bayer.png"
 	Texture BlueNoise "textures/BlueNoise.png"
+	Texture TrooCullersLUT "textures/24bitBlend.png"
 	Uniform float pixelcount
 	Uniform float dspread
 	Uniform int ordereddither
 	Uniform int posterization
 	Uniform float gamma
 	Uniform int enablepixelate
-	Uniform int enableposterization
+	Uniform int posterizationMode
 	Uniform int noisePattern
 	Uniform int scaleMode
 	Uniform int altScaling

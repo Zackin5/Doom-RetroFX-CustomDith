@@ -5,7 +5,7 @@ nosave float gl_retro_gamma = 0.46;//Higher = Less colors in shadows. Keep it lo
 nosave float gl_retro_spread = 2.5;//Higher = Less dither spreading
 nosave bool gl_retro_ordered = true;
 nosave bool gl_retro_enablepixelate = false;//Enable pixelation. 1 is Yes, 0 is No.
-nosave bool gl_retro_enableposterization = true;//Enable posterization. 1 is Yes, 0 is No.
+nosave int gl_retro_posterizationmode = 1;//Enable posterization. 1 is Yes, 0 is No.
 nosave int gl_retro_noisepattern = 1;//Noise pattern. 1 is Blue Noise, 0 is Bayer.
 nosave int gl_retro_scalingmode = 1; //Select scaling algorithm
 nosave int gl_retro_mode2_resx = 320;

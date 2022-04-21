@@ -16,6 +16,13 @@ OptionValue RetroFx_ScaleMode
 	2, "To Resolution (Auto Height)"
 }
 
+OptionValue RetroFx_PosterizationMode
+{
+	0, "Off"
+	1, "RetroFX"
+	2, "TrooCullers 24Bit"
+}
+
 OptionMenu "RetroOptions"
 {
 	Position -15
@@ -27,9 +34,8 @@ OptionMenu "RetroOptions"
 	Slider "Pixel Scale", "gl_retro_pixelcount", 1, 16, 0.5, 2
 	TextField "Scaling Mode 2 Width", "gl_retro_mode2_resx"
 	TextField "Scaling Mode 2 Height", "gl_retro_mode2_resy"
-	Option "Bit Depth Scaling", "gl_retro_enableposterization", "YesNo"
+	Option "Bit Depth Scaling", "gl_retro_posterizationmode", "RetroFx_PosterizationMode"
 	Slider "Bit Depth", "gl_retro_posterization", 3, 32, 1, 0
-	//Option "Ordered Dither?", "gl_retro_ordered", "YesNo"
 	Option "Dither Pattern", "gl_retro_noisepattern", "Dither_NoisePattern"
 	Slider "Dither Spread", "gl_retro_spread", 0, 32, 0.5, 0
 	Slider "Gamma", "gl_retro_gamma", 0, 1, 0.01, 2
