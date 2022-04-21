@@ -39,6 +39,17 @@ vec4 pixelate(sampler2D colorTex, float spread)
 	return texture(colorTex, coord)*dth;
 }
 
+vec4 posterize(vec4 pixelColor)
+{
+	vec4 c = pixelColor;
+	c = pow(c, vec4(gamma, gamma, gamma, 1));
+	c = c * posterization;
+	c = floor(c);
+	c = c / posterization;
+	c = pow(c, vec4(1.0/gamma));
+	return c;
+}
+
 void main() 
 {
 	if ( enablepixelate == 1 )
@@ -46,11 +57,7 @@ void main()
 		if ( enableposterization == 1 )
 		{
 			vec4 c = pixelate(InputTexture, dspread);
-			c = pow(c, vec4(gamma, gamma, gamma, 1));
-			c = c * posterization;
-			c = floor(c);
-			c = c / posterization;
-			c = pow(c, vec4(1.0/gamma));
+			c = posterize(c);
 			FragColor = vec4(c);
 		}
 		if ( enableposterization == 0 )
@@ -61,11 +68,7 @@ void main()
 	if ( enablepixelate == 0 )
 	{
 		vec4 c = texture(InputTexture, TexCoord.xy);
-		c = pow(c, vec4(gamma, gamma, gamma, 1));
-		c = c * posterization;
-		c = floor(c);
-		c = c / posterization;
-		c = pow(c, vec4(1.0/gamma));
+		c = posterize(c);
 		FragColor = vec4(c);
 	}
 }
