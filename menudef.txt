@@ -30,7 +30,7 @@ OptionMenu "RetroOptions"
 	Title "Retro FX Config"
 	Option "Enable?", "gl_retro", "OnOff"
 	Option "Pixelate?", "gl_retro_enablepixelate", "YesNo"
-	Option "Scaling Mode", "gl_retro_scalingmode", "RetroFx_ScaleMode"	
+	Option "Scaling Mode", "gl_retro_scalingmode", "RetroFx_ScaleMode"
 	Option "Alternative Pixel Scaling", "gl_retro_altscaling", "YesNo"
 	Slider "Pixel Scale", "gl_retro_pixelcount", 1, 16, 0.5, 2
 	TextField "Scaling Mode 2 Width", "gl_retro_mode2_resx"

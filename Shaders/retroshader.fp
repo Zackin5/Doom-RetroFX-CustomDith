@@ -51,7 +51,7 @@ vec3 posterize_retrofx(vec3 pixelColor)
 	return c;
 }
 
-// Troocutter 24bit
+// Trooculler 24bit
 float WeightedLum(vec3 colour)
 {
 	colour *= colour;
@@ -61,7 +61,7 @@ float WeightedLum(vec3 colour)
 	return sqrt(colour.r + colour.g + colour.b);
 }
 
-vec3 Tonemap(vec3 color, float sat)
+vec3 Trooculler_Tonemap(vec3 color, float sat)
 {
 	ivec3 c = ivec3(clamp(color, vec3(0.0), vec3(1.0)) * 255.0 + 0.5);
 	int index = (c.r * 256 + c.g) * 256 + c.b;
@@ -76,8 +76,8 @@ vec3 Tonemap(vec3 color, float sat)
 
 vec3 posterize_troo(vec3 pixelColor, float sat, float greyed)
 {
-	vec3 colour = pixelColor.rgb;
-	vec3 blend = Tonemap(colour, sat);
+	vec3 colour = pixelColor;
+	vec3 blend = Trooculler_Tonemap(colour, sat);
 	
 	float maxRGB = max(blend.r, max(blend.g, blend.b));
 	float minRGB = min(blend.r, min(blend.g, blend.b));
@@ -132,9 +132,7 @@ vec3 posterize_softshade(vec3 color)
 	hsv.z = max(hsv.z, 0.0);
 	fragcol.rgb = hsv2rgb(hsv);
 
-	fragcol = texelFetch(TexLUT8, getLUTCoordForRGB(fragcol), 0).rgb;
-
-	return fragcol;
+	return texelFetch(TexLUT8, getLUTCoordForRGB(fragcol), 0).rgb;
 }
 
 vec3 posterize(vec3 color)
@@ -143,7 +141,7 @@ vec3 posterize(vec3 color)
 		return posterize_troo(color, 1.0, 1.0);
 	if (posterizationMode == 3)
 		return posterize_softshade(color);
-	
+
 	return posterize_retrofx(color);
 }
 
