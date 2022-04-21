@@ -20,7 +20,8 @@ OptionValue RetroFx_PosterizationMode
 {
 	0, "Off"
 	1, "RetroFX"
-	2, "TrooCullers 24Bit"
+	2, "Troo Cullers 24Bit"
+	3, "SoftShade Palette"
 }
 
 OptionMenu "RetroOptions"

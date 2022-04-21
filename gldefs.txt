@@ -5,6 +5,8 @@ hardwareshader postprocess scene
 	Texture Bayer "textures/Bayer.png"
 	Texture BlueNoise "textures/BlueNoise.png"
 	Texture TrooCullersLUT "textures/24bitBlend.png"
+    Texture TexLUT8 "SFSHDLUT"
+    Texture TexLUT "patches/p_neutral_lut.png"
 	Uniform float pixelcount
 	Uniform float dspread
 	Uniform int ordereddither

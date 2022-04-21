@@ -94,15 +94,57 @@ vec3 posterize_troo(vec3 pixelColor, float sat, float greyed)
 	return colour;
 }
 
-vec4 posterize(vec4 pixelColor)
+// SoftShade
+vec3 rgb2hsv(vec3 c)
 {
-	vec3 color = pixelColor.rgb;
-	if (posterizationMode == 2)
-		color = posterize_troo(color, 1.0, 1.0);
-	else
-		color = posterize_retrofx(color);
+	vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+	vec4 p = (c.g < c.b) ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);
+	vec4 q = (c.r < p.x) ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);
+	float d = q.x - min(q.w, q.y);
+	float e = 1.0e-10;
+	return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
 
-	return vec4(color, pixelColor.a);
+vec3 hsv2rgb(vec3 c)
+{
+	vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+	vec3 p = abs(fract(c.xxx + K.xyz) * 6.0-K.www);
+	return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+ivec2 getLUTCoordForRGB(vec3 fragcol)
+{
+    int b = int(clamp(fragcol.b * 63, 0, 63));
+    ivec2 bluecoord = ivec2(b % 8, b / 8) * 64;
+    ivec2 rgcoord = ivec2(
+        int(clamp(fragcol.r * 63, 0, 63)),
+        int(clamp(fragcol.g * 63, 0, 63)));
+
+	return bluecoord + rgcoord;
+}
+
+vec3 posterize_softshade(vec3 color)
+{
+    vec3 fragcol = color;
+
+	vec3 hsv = rgb2hsv(fragcol.rgb);
+	hsv.y = clamp(hsv.y, 0.0, 1.0);
+	hsv.z = max(hsv.z, 0.0);
+	fragcol.rgb = hsv2rgb(hsv);
+
+	fragcol = texelFetch(TexLUT8, getLUTCoordForRGB(fragcol), 0).rgb;
+
+	return fragcol;
+}
+
+vec3 posterize(vec3 color)
+{
+	if (posterizationMode == 2)
+		return posterize_troo(color, 1.0, 1.0);
+	if (posterizationMode == 3)
+		return posterize_softshade(color);
+	
+	return posterize_retrofx(color);
 }
 
 void main() 
@@ -112,7 +154,7 @@ void main()
 		if ( posterizationMode > 0 )
 		{
 			vec4 c = pixelate(InputTexture, dspread);
-			c = posterize(c);
+			c.rgb = posterize(c.rgb);
 			FragColor = vec4(c);
 		}
 		else
@@ -123,7 +165,7 @@ void main()
 	if ( enablepixelate == 0 )
 	{
 		vec4 c = texture(InputTexture, TexCoord.xy);
-		c = posterize(c);
+		c.rgb = posterize(c.rgb);
 		FragColor = vec4(c);
 	}
 }
