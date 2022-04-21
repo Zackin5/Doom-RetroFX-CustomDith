@@ -7,6 +7,7 @@ hardwareshader postprocess scene
 	Texture TrooCullersLUT "textures/24bitBlend.png"
     Texture TexLUT8 "SFSHDLUT"
     Texture TexLUT "patches/p_neutral_lut.png"
+	Texture GDLUT "textures/bones.png"
 	Uniform float pixelcount
 	Uniform float dspread
 	Uniform int ordereddither
@@ -17,5 +18,6 @@ hardwareshader postprocess scene
 	Uniform int noisePattern
 	Uniform int scaleMode
 	Uniform int altScaling
+	Uniform int greyDoubtMode
 	Uniform vec2 mode2_res
 }

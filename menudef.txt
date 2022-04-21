@@ -24,6 +24,13 @@ OptionValue RetroFx_PosterizationMode
 	3, "SoftShade Palette"
 }
 
+OptionValue RetroFx_GreyDoubtMode
+{
+	0, "Off"
+	1, "Pre-Tonemap"
+	2, "Post-Tonemap"
+}
+
 OptionMenu "RetroOptions"
 {
 	Position -15
@@ -35,6 +42,7 @@ OptionMenu "RetroOptions"
 	Slider "Pixel Scale", "gl_retro_pixelcount", 1, 16, 0.5, 2
 	TextField "Scaling Mode 2 Width", "gl_retro_mode2_resx"
 	TextField "Scaling Mode 2 Height", "gl_retro_mode2_resy"
+	Option "GreyDoubt", "gl_retro_greydoubtmode", "RetroFx_GreyDoubtMode"
 	Option "Bit Depth Scaling", "gl_retro_posterizationmode", "RetroFx_PosterizationMode"
 	Slider "Bit Depth", "gl_retro_posterization", 3, 32, 1, 0
 	Option "Dither Pattern", "gl_retro_noisepattern", "Dither_NoisePattern"

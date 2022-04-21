@@ -135,14 +135,42 @@ vec3 posterize_softshade(vec3 color)
 	return texelFetch(TexLUT8, getLUTCoordForRGB(fragcol), 0).rgb;
 }
 
+// GreyDoubt
+float GreyDoubt_Tonemap( vec3 color )
+{	ivec3 c; int index; int tx; int ty;
+
+	c		= ivec3( clamp( color, 0.0, 1.0 ) * 255.0 + 0.5 );
+	index	= ( c.r * 256 + c.g ) * 256 + c.b;
+	tx		= index % 4096;
+	ty		= index * 1 / 4096;
+	
+	return texelFetch( GDLUT, ivec2( tx, ty ), 0 ).x;
+}
+
+const vec3 grey = vec3( 0.2125862307855955516, 0.7151703037034108499, 0.07220049864333622685 );
+
+vec3 posterize_greyDoubt(vec3 color)
+{
+	float greymap = GreyDoubt_Tonemap( color );
+	return mix( color, vec3( dot( color, grey )), greymap );
+}
+
 vec3 posterize(vec3 color)
 {
-	if (posterizationMode == 2)
-		return posterize_troo(color, 1.0, 1.0);
-	if (posterizationMode == 3)
-		return posterize_softshade(color);
+	if (greyDoubtMode == 1)
+		color = posterize_greyDoubt(color);
 
-	return posterize_retrofx(color);
+	if (posterizationMode == 2)
+		color = posterize_troo(color, 1.0, 1.0);
+	else if (posterizationMode == 3)
+		color = posterize_softshade(color);
+	else
+		color = posterize_retrofx(color);
+	
+	if (greyDoubtMode == 2)
+		color = posterize_greyDoubt(color);
+
+	return color;
 }
 
 void main() 

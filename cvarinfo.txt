@@ -11,3 +11,4 @@ nosave int gl_retro_scalingmode = 1; //Select scaling algorithm
 nosave int gl_retro_mode2_resx = 320;
 nosave int gl_retro_mode2_resy = 200;
 nosave bool gl_retro_altscaling = true;//Enable alternative scaling algorithm
+nosave int gl_retro_greydoubtmode = 1;//Enable GreyDoubt post effect
