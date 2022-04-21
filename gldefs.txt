@@ -13,5 +13,6 @@ hardwareshader postprocess scene
 	Uniform int enableposterization
 	Uniform int noisePattern
 	Uniform int scaleMode
+	Uniform int altScaling
 	Uniform vec2 mode2_res
 }

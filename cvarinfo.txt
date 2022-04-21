@@ -10,3 +10,4 @@ nosave int gl_retro_noisepattern = 1;//Noise pattern. 1 is Blue Noise, 0 is Baye
 nosave int gl_retro_scalingmode = 1; //Select scaling algorithm
 nosave int gl_retro_mode2_resx = 320;
 nosave int gl_retro_mode2_resy = 200;
+nosave bool gl_retro_altscaling = true;//Enable alternative scaling algorithm

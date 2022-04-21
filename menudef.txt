@@ -11,10 +11,9 @@ OptionValue Dither_NoisePattern
 
 OptionValue RetroFx_ScaleMode
 {
-	0, "RetroFX"
-	1, "Alternative"
-	2, "To Resolution"
-	3, "To Resolution (Auto Height)"
+	0, "Pixel Scale"
+	1, "To Resolution"
+	2, "To Resolution (Auto Height)"
 }
 
 OptionMenu "RetroOptions"
@@ -23,8 +22,9 @@ OptionMenu "RetroOptions"
 	Title "Retro FX Config"
 	Option "Enable?", "gl_retro", "OnOff"
 	Option "Pixelate?", "gl_retro_enablepixelate", "YesNo"
+	Option "Scaling Mode", "gl_retro_scalingmode", "RetroFx_ScaleMode"	
+	Option "Alternative Pixel Scaling", "gl_retro_altscaling", "YesNo"
 	Slider "Pixel Scale", "gl_retro_pixelcount", 1, 16, 0.5, 2
-	Option "Scaling Mode", "gl_retro_scalingmode", "RetroFx_ScaleMode"
 	TextField "Scaling Mode 2 Width", "gl_retro_mode2_resx"
 	TextField "Scaling Mode 2 Height", "gl_retro_mode2_resy"
 	Option "Bit Depth Scaling", "gl_retro_enableposterization", "YesNo"
