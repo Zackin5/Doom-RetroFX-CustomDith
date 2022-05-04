@@ -21,4 +21,5 @@ hardwareshader postprocess scene
 	Uniform int greyDoubtMode
 	Uniform int mode2_res_x
 	Uniform int mode2_res_y
+	Uniform float gzdds_dither_amount
 }

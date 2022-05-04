@@ -28,8 +28,7 @@ vec4 gzdds_dither(vec2 ssize, vec2 TexCoord)
 		0.1875, 0.6875, 0.0625, 0.5625,
 		0.9375, 0.4375, 0.8125, 0.3125
 	);
-	float paldither = 8; // TODO: cvar
-	float paldith = paldither * 0.00390625;
+	float paldith = gzdds_dither_amount * 0.00390625;
 	vec2 coord = TexCoord;
 	vec2 targtres = ssize;
 	vec2 sfact = vec2(textureSize(InputTexture,0));

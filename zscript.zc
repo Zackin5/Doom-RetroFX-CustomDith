@@ -19,6 +19,7 @@ class RetroHandler : StaticEventHandler
 			Shader.SetUniform1f(p, "RetroShader", "altScaling", Cvar.GetCVar("gl_retro_altscaling", p).GetInt());
 			Shader.SetUniform1f(p, "RetroShader", "posterizationMode", Cvar.GetCVar("gl_retro_posterizationmode", p).GetInt());
 			Shader.SetUniform1f(p, "RetroShader", "greyDoubtMode", Cvar.GetCVar("gl_retro_greydoubtmode", p).GetInt());
+			Shader.SetUniform1f(p, "RetroShader", "gzdds_dither_amount", Cvar.GetCVar("gl_retro_gzdds_dither", p).GetFloat());
 			
 			Int scalingmode = Cvar.GetCVar("gl_retro_scalingmode", p).GetInt();
 			Shader.SetUniform1f(p, "RetroShader", "scaleMode", scalingmode);

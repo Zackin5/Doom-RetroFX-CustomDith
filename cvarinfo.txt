@@ -12,3 +12,4 @@ nosave int gl_retro_mode2_resx = 320;
 nosave int gl_retro_mode2_resy = 200;
 nosave bool gl_retro_altscaling = true;//Enable alternative scaling algorithm
 nosave int gl_retro_greydoubtmode = 1;//Enable GreyDoubt post effect
+nosave float gl_retro_gzdds_dither = 5;
