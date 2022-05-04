@@ -26,16 +26,20 @@ class RetroHandler : StaticEventHandler
 			if (scalingmode == 1)
 			{
 				// Resolution scaling mode res calc
-				Vector2 bresl = (clamp(gl_retro_mode2_resx,1,Screen.GetWidth()), clamp(gl_retro_mode2_resy,1,Screen.GetHeight()));
-				Shader.SetUniform2f(p, "RetroShader", "mode2_res", bresl);
+				Int bresl_x = clamp(gl_retro_mode2_resx,1,Screen.GetWidth());
+				Int bresl_y = clamp(gl_retro_mode2_resy,1,Screen.GetHeight());
+				Shader.SetUniform1f(p, "RetroShader", "mode2_res_x", bresl_x);
+				Shader.SetUniform1f(p, "RetroShader", "mode2_res_y", bresl_y);
 			}
 			else if (scalingmode == 2)
 			{
 				// Resolution scaling mode auto height calc
 				Float scaleRatio = Screen.GetWidth() / gl_retro_mode2_resx;
-				Float autoY = Screen.GetHeight() / scaleRatio;
-				Vector2 bresl = (clamp(gl_retro_mode2_resx,1,Screen.GetWidth()), clamp(autoY,1,Screen.GetHeight()));
-				Shader.SetUniform2f(p, "RetroShader", "mode2_res", bresl);
+				Int autoY = Screen.GetHeight() / scaleRatio;
+				Int bresl_x = clamp(gl_retro_mode2_resx,1,Screen.GetWidth());
+				Int bresl_y = clamp(autoY,1,Screen.GetHeight());
+				Shader.SetUniform1f(p, "RetroShader", "mode2_res_x", bresl_x);
+				Shader.SetUniform1f(p, "RetroShader", "mode2_res_y", bresl_y);
 			}
 
 			Shader.SetEnabled(p, "RetroShader", true);

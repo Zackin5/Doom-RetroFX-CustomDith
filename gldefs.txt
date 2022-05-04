@@ -19,5 +19,6 @@ hardwareshader postprocess scene
 	Uniform int scaleMode
 	Uniform int altScaling
 	Uniform int greyDoubtMode
-	Uniform vec2 mode2_res
+	Uniform int mode2_res_x
+	Uniform int mode2_res_y
 }

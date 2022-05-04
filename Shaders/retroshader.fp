@@ -1,7 +1,82 @@
+// MariFX\GZDDS Dither
+#if __VERSION__ >= 130
+	#define COMPAT_VARYING in
+	#define COMPAT_TEXTURE texture
+#else
+	#define COMPAT_VARYING varying
+	#define FragColor gl_FragColor
+	#define COMPAT_TEXTURE texture2D
+#endif
+
+#ifdef GL_ES
+	#ifdef GL_FRAGMENT_PRECISION_HIGH
+		precision highp float;
+	#else
+		precision mediump float;
+	#endif
+	#define COMPAT_PRECISION mediump
+#else
+	#define COMPAT_PRECISION
+#endif
+
+vec4 gzdds_dither(vec2 ssize, vec2 TexCoord)
+{
+	COMPAT_PRECISION float dither4[16] = float[]
+	(
+		0.0000, 0.5000, 0.1250, 0.6250,
+		0.7500, 0.2500, 0.8750, 0.3750,
+		0.1875, 0.6875, 0.0625, 0.5625,
+		0.9375, 0.4375, 0.8125, 0.3125
+	);
+	float paldither = 8; // TODO: cvar
+	float paldith = paldither * 0.00390625;
+	vec2 coord = TexCoord;
+	vec2 targtres = ssize;
+	vec2 sfact = vec2(textureSize(InputTexture,0));
+	coord = vec2((floor(TexCoord.x*targtres.x)+0.5)/targtres.x,(floor(TexCoord.y*targtres.y)+0.5)/targtres.y);
+	sfact.xy = targtres.xy;
+	vec4 res = texture(InputTexture, coord);
+	if ( res.r <= 0.0 ) res.r -= paldith;
+	if ( res.g <= 0.0 ) res.g -= paldith;
+	if ( res.b <= 0.0 ) res.b -= paldith;
+	if ( res.r >= 1.0 ) res.r += paldith;
+	if ( res.g >= 1.0 ) res.g += paldith;
+	if ( res.b >= 1.0 ) res.b += paldith;
+	res.rgb += paldith*dither4[int(coord.x*sfact.x)%4+int(coord.y*sfact.y)%4*4]-0.5*paldith;
+	return res;
+}
+
+vec4 retrofx_dither(sampler2D colorTex, vec2 ssize, vec2 coord, float spread)
+{
+	vec2 dcoord;
+	dcoord = vec2( (TexCoord.x*ssize.x/pixelcount ) ,
+				(TexCoord.y*ssize.y/pixelcount ) );
+	ivec2 d_coord = ivec2( dcoord.x, dcoord.y );
+
+	ivec2 dsize;
+	if(noisePattern == 2)
+		dsize = textureSize(BlueNoise, 0 );
+	else
+		dsize = textureSize(Bayer, 0 );
+
+	d_coord.x -= int ( floor(float(d_coord.x/dsize.x)) )*dsize.x;
+	d_coord.y -= int ( floor(float(d_coord.y/dsize.y)) )*dsize.y;
+
+	float noiseTexel;
+	if(noisePattern == 2)
+		noiseTexel = texelFetch(BlueNoise, d_coord, 0 ).r;
+	else
+		noiseTexel = texelFetch(Bayer, d_coord, 0 ).r;
+
+	float dth = 1.0+(0.5-noiseTexel)/(33.5-spread);
+	return texture(colorTex, coord)*dth;
+}
+
 // RetroFX implementation
 vec4 pixelate(sampler2D colorTex, float spread)
 {
 	ivec2 ssize = textureSize( InputTexture, 0 );
+	ivec2 mode2_res = ivec2(mode2_res_x, mode2_res_y);
 	
 	float scalingOffset = 0.5 * altScaling;	// Calculate if alternative scaling offset should be used
 	vec2 coord;
@@ -15,29 +90,12 @@ vec4 pixelate(sampler2D colorTex, float spread)
 		coord = (ceil(TexCoord*targtres)+scalingOffset)/targtres;
 	}
 
-	vec2 dcoord;
-	dcoord = vec2( (TexCoord.x*ssize.x/pixelcount ) ,
-				(TexCoord.y*ssize.y/pixelcount ) );
-	ivec2 d_coord = ivec2( dcoord.x, dcoord.y );
-
-	ivec2 dsize;
-	if(noisePattern == 1)
-		dsize = textureSize(BlueNoise, 0 );
-	else
-		dsize = textureSize(Bayer, 0 );
-
-	d_coord.x -= int ( floor(float(d_coord.x/dsize.x)) )*dsize.x;
-	d_coord.y -= int ( floor(float(d_coord.y/dsize.y)) )*dsize.y;
-
-	float noiseTexel;
-	if(noisePattern == 1)
-		noiseTexel = texelFetch(BlueNoise, d_coord, 0 ).r;
-	else
-		noiseTexel = texelFetch(Bayer, d_coord, 0 ).r;
-
-	float dth = 1.0+(0.5-noiseTexel)/(33.5-spread);
-
-	return texture(colorTex, coord)*dth;
+	if(noisePattern == 1 || noisePattern == 2)
+		return retrofx_dither(colorTex, ssize, coord, spread);
+	if(noisePattern == 3)
+		return gzdds_dither(ssize, coord);
+		
+	return texture(colorTex, coord);
 }
 
 vec3 posterize_retrofx(vec3 pixelColor)

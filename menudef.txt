@@ -5,8 +5,10 @@ AddOptionMenu "OptionsMenu"
 
 OptionValue Dither_NoisePattern
 {
-	0, "Bayer"
-	1, "Blue Noise"
+	0, "Off"
+	1, "RetroFX Bayer"
+	2, "RetroFX Blue Noise"
+	3, "GZDoomDemakeShaders Bayer"
 }
 
 OptionValue RetroFx_ScaleMode
