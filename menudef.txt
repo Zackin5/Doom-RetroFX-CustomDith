@@ -37,17 +37,26 @@ OptionMenu "RetroOptions"
 {
 	Position -15
 	Title "Retro FX Config"
-	Option "Enable?", "gl_retro", "OnOff"
-	Option "Pixelate?", "gl_retro_enablepixelate", "YesNo"
+	Option "Enable", "gl_retro", "OnOff"
+
+	StaticText " "
+	StaticText "Pixelate", "Gray"
+	Option "Enable", "gl_retro_enablepixelate", "YesNo"
 	Option "Scaling Mode", "gl_retro_scalingmode", "RetroFx_ScaleMode"
 	Option "Alternative Pixel Scaling", "gl_retro_altscaling", "YesNo"
 	Slider "Pixel Scale", "gl_retro_pixelcount", 1, 16, 0.5, 2
 	TextField "Scaling Mode 2 Width", "gl_retro_mode2_resx"
 	TextField "Scaling Mode 2 Height", "gl_retro_mode2_resy"
-	Option "GreyDoubt", "gl_retro_greydoubtmode", "RetroFx_GreyDoubtMode"
-	Option "Bit Depth Scaling", "gl_retro_posterizationmode", "RetroFx_PosterizationMode"
-	Slider "Bit Depth", "gl_retro_posterization", 3, 32, 1, 0
+
+	StaticText " "
+	StaticText "Posterization", "Gray"
+	Option "RetroFX Bit Depth Scaling", "gl_retro_posterizationmode", "RetroFx_PosterizationMode"
+	Slider "RetroFX Bit Depth", "gl_retro_posterization", 3, 32, 1, 0
+	Slider "RetroFX Gamma", "gl_retro_gamma", 0, 1, 0.01, 2
+
+	StaticText " "
+	StaticText "Dithering", "Gray"
 	Option "Dither Pattern", "gl_retro_noisepattern", "Dither_NoisePattern"
-	Slider "Dither Spread", "gl_retro_spread", 0, 32, 0.5, 0
-	Slider "Gamma", "gl_retro_gamma", 0, 1, 0.01, 2
+	Slider "RetroFX Dither Spread", "gl_retro_spread", 0, 32, 0.5, 2
+	Slider "GZDDS Dither", "gl_retro_gzdds_dither", 0, 256, 1, 0
 }

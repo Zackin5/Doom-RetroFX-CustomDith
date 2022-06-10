@@ -18,7 +18,6 @@ hardwareshader postprocess scene
 	Uniform int noisePattern
 	Uniform int scaleMode
 	Uniform int altScaling
-	Uniform int greyDoubtMode
 	Uniform int mode2_res_x
 	Uniform int mode2_res_y
 	Uniform float gzdds_dither_amount
