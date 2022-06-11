@@ -201,7 +201,7 @@ vec3 posterize(vec3 color)
 	else
 		color = posterize_retrofx(color);
 
-	return color;
+	return clamp(color, 0.0, 1.0);	// Saturate() color to prevent artifacts
 }
 
 void main() 
